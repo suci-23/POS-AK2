@@ -8,10 +8,17 @@ include 'config/connect.php';
 if (isset($_POST['email'])) {
   $email = $_POST['email'];
   $password = sha1($_POST['password']);
+  $role = $_POST['role'];
+
+  //jika login dengan role
+  if ($role == 1) {
+    $querylogin = mysqli_query($config, "SELECT * FROM instructors WHERE email='$email' AND password='$password'");
+  } else {
+    $querylogin = mysqli_query($config, "SELECT * FROM users WHERE email='$email' AND password='$password'");
+  }
 
   //tampilkan semua data dari tbl users dmn emailnya diambil dr orang yg input email
   //password diambil dr org yg input password
-  $querylogin = mysqli_query($config, "SELECT * FROM users WHERE email='$email' AND password='$password'");
 
   //Jika data user ditemukan, mysqli_num_rows("hasil query login")
   if (mysqli_num_rows($querylogin) > 0) {
@@ -19,7 +26,7 @@ if (isset($_POST['email'])) {
     //header("location:nmfile.php"), untuk redirect ke halaman selanjutnya
     $rowlogin = mysqli_fetch_assoc($querylogin);
     $_SESSION['ID_USER'] = $rowlogin['id'];
-    $_SESSION['NAME'] = $rowlogin['nm_user'];
+    $_SESSION['NAME'] = isset($role) ? ($role == 1) ? $rowlogin['nm_instructor'] : $rowlogin['nm_user'] : '';
 
     header("location:home.php");
   } else {
@@ -113,6 +120,17 @@ if (isset($_POST['email'])) {
                       <label for="yourPassword" class="form-label">Password</label>
                       <input type="password" name="password" class="form-control" id="yourPassword" required>
                       <div class="invalid-feedback">Please enter your password!</div>
+                    </div>
+
+                    <div class="col-12">
+                      <label for="yourRole" class="form-label">Role</label>
+                      <select name="role" id="youRole" class="form-control" required>
+                        <option value="">Select Role</option>
+                        <option value="1">Instructor</option>
+                        <option value="2">Student</option>
+                        <option value="3">Other</option>
+                      </select>
+                      <div class="invalid-feedback">Please select your role!</div>
                     </div>
 
                     <div class="col-12">

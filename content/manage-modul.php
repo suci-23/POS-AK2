@@ -33,6 +33,13 @@ if (isset($_POST['nm_major'])) {
     header("location:?page=majors&edit=success");
   }
 }
+
+$id_instructor = isset($_SESSION['ID_USER']) ? $_SESSION['ID_USER'] : '';
+$queryinstructormajor = mysqli_query($config, "SELECT majors.nm_major, instructor_majors.*
+                                    FROM instructor_majors LEFT JOIN majors ON majors.id = instructor_majors.id_major
+                                    WHERE instructor_majors.id_instructor = '$id_instructor'");
+
+$rowinstructormajors = mysqli_fetch_all($queryinstructormajor, MYSQLI_ASSOC);
 ?>
 
 <div class="row">
@@ -41,14 +48,29 @@ if (isset($_POST['nm_major'])) {
       <div class="card-body">
         <h5 class="card-title">
           <!-- Ganti judul di bagian Card Title -->
-          <?= isset($_GET['edit']) ? 'Edit Role' : 'Add Role' ?>
+          <?= isset($_GET['edit']) ? 'Edit Modul' : 'Add Modul' ?>
         </h5>
 
         <form action="" method="post">
-          <div class="mb-3">
-            <label for="">Major Name*</label>
-            <input type="text" class="form-control" name="nm_major" placeholder="Enter Role" required
-              value="<?= isset($_GET['edit']) ? $rowedit['nm_major'] : ''; ?>">
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="mb-3">
+                <label for="" class="form-label">Instructor Name*</label>
+                <input readonly value="<?php echo $_SESSION['NAME'] ?>" type="text" class="form-control">
+                <input type="hidden" name="id_instructor" value="<?php echo $_SESSION['ID_USER'] ?>">
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="mb-3">
+                <label for="" class="form-label">Major Name</label>
+                <select name="id_major" id="" class="form-control">
+                  <option value="">Select One</option>
+                  <?php foreach ($rowinstructormajors as $row): ?>
+                    <option value="<?php echo $row['id_major'] ?>"><?php echo $row['nm_major'] ?></option>
+                  <?php endforeach ?>
+                </select>
+              </div>
+            </div>
           </div>
           <div class="mb-3">
             <input type="submit" class="btn btn-success" name="save" value="Save">
