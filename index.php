@@ -8,14 +8,10 @@ include 'config/connect.php';
 if (isset($_POST['email'])) {
   $email = $_POST['email'];
   $password = sha1($_POST['password']);
-  $role = $_POST['role'];
 
   //jika login dengan role
-  if ($role == 1) {
-    $querylogin = mysqli_query($config, "SELECT * FROM instructors WHERE email='$email' AND password='$password'");
-  } else {
-    $querylogin = mysqli_query($config, "SELECT * FROM users WHERE email='$email' AND password='$password'");
-  }
+
+  $querylogin = mysqli_query($config, "SELECT * FROM users WHERE email='$email' AND password='$password'");
 
   //tampilkan semua data dari tbl users dmn emailnya diambil dr orang yg input email
   //password diambil dr org yg input password
@@ -26,14 +22,21 @@ if (isset($_POST['email'])) {
     //header("location:nmfile.php"), untuk redirect ke halaman selanjutnya
     $rowlogin = mysqli_fetch_assoc($querylogin);
     $_SESSION['ID_USER'] = $rowlogin['id'];
-    $_SESSION['NAME'] = isset($role) ? ($role == 1) ? $rowlogin['nm_instructor'] : $rowlogin['nm_user'] : '';
+
+    if ($role == 3) {
+      $_SESSION['NAME'] = $rowlogin['nm_instructor'];
+    } elseif ($role == 5) {
+      $_SESSION['NAME'] = $rowlogin['nm_student'];
+    } else {
+      $_SESSION['NAME'] = $rowlogin['nm_user'];
+    }
+    // $_SESSION['NAME'] = isset($role) ? ($role == 3) ? $rowlogin['nm_instructor'] : $rowlogin['nm_student'] : $rowlogin['nm_user'];
 
     header("location:home.php");
   } else {
     header("location:index.php?login=error");
   }
 }
-
 ?>
 
 
@@ -44,7 +47,7 @@ if (isset($_POST['email'])) {
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>LMS | PPKD JAKARTA PUSAT</title>
+  <title>POS | PPKD JAKARTA PUSAT</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -92,7 +95,7 @@ if (isset($_POST['email'])) {
               <div class="d-flex justify-content-center py-4">
                 <a href="index.html" class="logo d-flex align-items-center w-auto">
                   <img src="assets/img/logo.png" alt="">
-                  <span class="d-none d-lg-block">LMS PPKD JAKPUS</span>
+                  <span class="d-none d-lg-block">POINT OF SALES</span>
                 </a>
               </div><!-- End Logo -->
 
@@ -120,17 +123,6 @@ if (isset($_POST['email'])) {
                       <label for="yourPassword" class="form-label">Password</label>
                       <input type="password" name="password" class="form-control" id="yourPassword" required>
                       <div class="invalid-feedback">Please enter your password!</div>
-                    </div>
-
-                    <div class="col-12">
-                      <label for="yourRole" class="form-label">Role</label>
-                      <select name="role" id="youRole" class="form-control" required>
-                        <option value="">Select Role</option>
-                        <option value="1">Instructor</option>
-                        <option value="2">Student</option>
-                        <option value="3">Other</option>
-                      </select>
-                      <div class="invalid-feedback">Please select your role!</div>
                     </div>
 
                     <div class="col-12">

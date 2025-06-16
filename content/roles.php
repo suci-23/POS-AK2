@@ -23,15 +23,17 @@ $rows = mysqli_fetch_all($query, MYSQLI_ASSOC);
             </thead>
             <tbody>
               <?php foreach ($rows as $key => $data): ?>
-              <tr>
-                <td><?php echo $key += 1; ?></td>
-                <td><?php echo $data['nm_role'] ?></td>
-                <td>
-                  <a href="?page=manage-role&edit=<?php echo $data['id'] ?>" class="btn btn-primary">Edit</a>
-                  <a onclick="return confirm('Are You Sure...?')"
-                    href="?page=manage-role&delete=<?php echo $data['id'] ?>" class="btn btn-danger">Delete</a>
-                </td>
-              </tr>
+                <tr>
+                  <td><?php echo $key += 1; ?></td>
+                  <td><?php echo $data['nm_role'] ?></td>
+                  <td>
+                    <a href="?page=manage-role&add-role-menu=<?php echo $data['id'] ?>" class="btn btn-success">+ Role
+                      Menu</a>
+                    <a href="?page=manage-role&edit=<?php echo $data['id'] ?>" class="btn btn-primary">Edit</a>
+                    <a onclick="return confirm('Are You Sure...?')"
+                      href="?page=manage-role&delete=<?php echo $data['id'] ?>" class="btn btn-danger">Delete</a>
+                  </td>
+                </tr>
               <?php endforeach ?>
             </tbody>
           </table>

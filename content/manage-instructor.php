@@ -29,16 +29,17 @@ if (isset($_POST['nm_instructor'])) {
   $email = $_POST['email'];
   $password = isset($_POST['password']) ? sha1($_POST['password']) : $rowedit('password');
   $address = $_POST['address'];
+  $id_role = 3;
 
 
 
   if (!isset($_GET['edit'])) {
-    $queryinsert = mysqli_query($config, "INSERT INTO instructors(nm_instructor, gender, education, phone, email, password,  address) VALUES ('$nm_instructor', '$gender', '$education', '$phone', '$email', '$address', '$password')");
+    $queryinsert = mysqli_query($config, "INSERT INTO instructors(id_role, nm_instructor, gender, education, phone, email, password,  address) VALUES ('$id_role', '$nm_instructor', '$gender', '$education', '$phone', '$email', '$address', '$password')");
     header("location:?page=instructors&add=success");
   } else {
     $id_instructor = isset($_GET['edit']) ? $_GET['edit'] : '';
 
-    $update = mysqli_query($config, "UPDATE instructors SET nm_instructor = '$nm_instructor', gender = '$gender', education = '$education', phone = '$phone', email = '$email', password = '$password', address = '$address' WHERE id = $id_instructor");
+    $update = mysqli_query($config, "UPDATE instructors SET id_role = '$id_role', nm_instructor = '$nm_instructor', gender = '$gender', education = '$education', phone = '$phone', email = '$email', password = '$password', address = '$address' WHERE id = $id_instructor");
     // print_r($_POST);
     // die;
     header("location:?page=instructors&edit=success");
