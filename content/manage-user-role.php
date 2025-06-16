@@ -1,7 +1,5 @@
 <?php
 
-use PSpell\Config;
-
 if (isset($_GET['delete'])) {
   $id = $_GET['delete'];
   $id_instructor = $_GET['id_instructor'];

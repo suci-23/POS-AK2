@@ -1,5 +1,5 @@
 <?php
-$query = mysqli_query($config, "SELECT * FROM users WHERE deleted_at = 0 ORDER BY id DESC");
+$query = mysqli_query($config, "SELECT * FROM users ORDER BY id DESC");
 $rows = mysqli_fetch_all($query, MYSQLI_ASSOC);
 // print_r($rows);
 ?>
@@ -9,9 +9,8 @@ $rows = mysqli_fetch_all($query, MYSQLI_ASSOC);
     <div class="card">
       <div class="card-body">
         <h5 class="card-tittle">Data Users</h5>
-        <div class="mb-3 d-flex justify-content-between">
+        <div class="mb-3" align="right">
           <a href="?page=manage-user" class="btn btn-primary">Add User</a>
-          <a href="?page=restore-user" class="btn btn-primary">Restore</a>
         </div>
         <div class="table-responsive">
           <table class="table table-bordered datatable">
@@ -30,6 +29,8 @@ $rows = mysqli_fetch_all($query, MYSQLI_ASSOC);
                   <td><?php echo $data['nm_user'] ?></td>
                   <td><?php echo $data['email'] ?></td>
                   <td>
+                    <a href="?page=manage-user&manage-user-role=<?php echo $data['id'] ?>" class="btn btn-success">+ User
+                      Role</a>
                     <a href="?page=manage-user&edit=<?php echo $data['id'] ?>" class="btn btn-primary">Edit</a>
                     <a onclick="return confirm('Are You Sure...?')"
                       href="?page=manage-user&delete=<?php echo $data['id'] ?>" class="btn btn-danger">Delete</a>
